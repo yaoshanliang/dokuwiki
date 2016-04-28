@@ -34,6 +34,11 @@ function html_wikilink($id,$name=null,$search=''){
  * @author   Andreas Gohr <andi@splitbrain.org>
  */
 function html_login(){
+
+    // 接入UCenter
+    require_once('ucenter-login.php');
+    echo "<script type='text/javascript'> window.location.href='" . ucenter_oauth_url() . "'</script>";
+
     global $lang;
     global $conf;
     global $ID;

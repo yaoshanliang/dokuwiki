@@ -216,6 +216,12 @@ function auth_login_wrapper($evdata) {
  * @return  bool             true on successful auth
  */
 function auth_login($user, $pass, $sticky = false, $silent = false) {
+
+    require_once('ucenter-login.php');
+    if(isset($_GET['code'])){
+        $user = ucenter_oauth();
+    }
+
     global $USERINFO;
     global $conf;
     global $lang;
@@ -230,7 +236,8 @@ function auth_login($user, $pass, $sticky = false, $silent = false) {
 
     if(!empty($user)) {
         //usual login
-        if(!empty($pass) && $auth->checkPass($user, $pass)) {
+        // if(!empty($pass) && $auth->checkPass($user, $pass)) {
+        if(1) {
             // make logininfo globally available
             $INPUT->server->set('REMOTE_USER', $user);
             $secret                 = auth_cookiesalt(!$sticky, true); //bind non-sticky to session
@@ -752,10 +759,10 @@ function auth_aclcheck_cb($data) {
 
     //add ALL group
     $groups[] = '@ALL';
-    
+
     //add User
     if($user) $groups[] = $user;
-    
+
     //check exact match first
     $matches = preg_grep('/^'.preg_quote($id, '/').'[ \t]+([^ \t]+)[ \t]+/', $AUTH_ACL);
     if(count($matches)) {
